@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Job = () => {
   return (
     <div className="lws-single-job">
@@ -21,10 +23,14 @@ const Job = () => {
       </div>
       <div className="mt-5 flex lg:mt-0 lg:ml-4">
         <span className="hidden sm:block">
-          <button type="button" className="lws-edit btn btn-primary">
+          <Link
+            to={"/update-job"}
+            type="button"
+            className="lws-edit btn btn-primary"
+          >
             <i className="fa-solid fa-pen text-gray-300 -ml-1 mr-2"></i>
             Edit
-          </button>
+          </Link>
         </span>
 
         <span className="sm:ml-3">
