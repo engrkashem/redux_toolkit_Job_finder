@@ -1,4 +1,4 @@
-import Form from "../components/addNewJob/Form";
+import Form from "../components/Form";
 import SideMenu from "../components/home/SideMenu";
 
 const AddNewJob = () => {

@@ -41,6 +41,20 @@
       "salary": "18000",
       "deadline": "2023-12-31",
       "id": 7
+    },
+    {
+      "title": "Frontend Engineer",
+      "type": "Internship",
+      "salary": "10000",
+      "deadline": "2024-02-01",
+      "id": 8
+    },
+    {
+      "title": "MERN Stack Developer",
+      "type": "Remote",
+      "salary": "13000",
+      "deadline": "2024-01-20",
+      "id": 9
     }
   ]
 }
