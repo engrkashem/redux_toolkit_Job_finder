@@ -1,16 +1,32 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useMatch } from "react-router-dom";
-import { createJob } from "../features/jobs/jobSlice";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { createJob, updateJob } from "../features/jobs/jobSlice";
 
 /* eslint-disable react/prop-types */
 const Form = ({ children }) => {
-  const match = useMatch("/create-new-job");
+  // const match = useMatch("/create-new-job");
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
   const [salary, setSalary] = useState("");
   const [deadline, setDeadline] = useState("");
   const dispatch = useDispatch();
+  const { id } = useParams();
+  const { jobs } = useSelector((state) => state.job);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const updatableJob = jobs?.filter((job) => job?.id === Number(id))[0] || {};
+
+    if (id && updatableJob?.id) {
+      setTitle(updatableJob?.title || "");
+      setType(updatableJob?.type || "");
+      setSalary(updatableJob?.salary || "");
+      setDeadline(updatableJob?.deadline || "");
+    } else {
+      navigate("/");
+    }
+  }, [id, jobs, navigate]);
 
   const reset = () => {
     setTitle("");
@@ -21,15 +37,17 @@ const Form = ({ children }) => {
 
   const forSubmitHandler = (e) => {
     e.preventDefault();
-    if (match) {
-      dispatch(
-        createJob({
-          title,
-          type,
-          salary,
-          deadline,
-        })
-      );
+    const data = {
+      title,
+      type,
+      salary,
+      deadline,
+    };
+    if (!id) {
+      dispatch(createJob(data));
+    } else {
+      dispatch(updateJob({ id, data }));
+      navigate("/");
     }
 
     reset();
@@ -40,11 +58,11 @@ const Form = ({ children }) => {
       <div className="fieldContainer">
         <label className="text-sm font-medium text-slate-300">Job Title</label>
         <select
-          onChange={(e) => setTitle(e.target.value)}
           id="lws-JobTitle"
           name="lwsJobTitle"
           value={title}
           required
+          onChange={(e) => setTitle(e.target.value)}
         >
           <option value="" hidden>
             Select Job
@@ -69,11 +87,11 @@ const Form = ({ children }) => {
       <div className="fieldContainer">
         <label>Job Type</label>
         <select
-          onChange={(e) => setType(e.target.value)}
           id="lws-JobType"
           name="lwsJobType"
           value={type}
           required
+          onChange={(e) => setType(e.target.value)}
         >
           <option value="" hidden>
             Select Job Type
@@ -89,7 +107,6 @@ const Form = ({ children }) => {
         <div className="flex border rounded-md shadow-sm border-slate-600">
           <span className="input-tag">BDT</span>
           <input
-            onChange={(e) => setSalary(e.target.value)}
             type="number"
             name="lwsJobSalary"
             id="lws-JobSalary"
@@ -97,6 +114,7 @@ const Form = ({ children }) => {
             required
             className="!rounded-l-none !border-0"
             placeholder="20,00,000"
+            onChange={(e) => setSalary(e.target.value)}
           />
         </div>
       </div>
@@ -104,12 +122,12 @@ const Form = ({ children }) => {
       <div className="fieldContainer">
         <label>Deadline</label>
         <input
-          onChange={(e) => setDeadline(e.target.value)}
           type="date"
           value={deadline}
           name="lwsJobDeadline"
           id="lws-JobDeadline"
           required
+          onChange={(e) => setDeadline(e.target.value)}
         />
       </div>
 

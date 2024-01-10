@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 
 const Job = ({ job }) => {
-  const { title, type, salary, deadline } = job;
+  const { title, type, salary, deadline, id } = job;
   const getColor = () => {
     let color = "";
     if (type === "Full Time") color = "#FF8A00";
@@ -36,7 +36,7 @@ const Job = ({ job }) => {
       <div className="mt-5 flex lg:mt-0 lg:ml-4">
         <span className="hidden sm:block">
           <Link
-            to={"/update-job"}
+            to={`/update-job/${id}`}
             type="button"
             className="lws-edit btn btn-primary"
           >
