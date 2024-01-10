@@ -1,8 +1,13 @@
 /* eslint-disable react/prop-types */
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { removeJob } from "../../features/jobs/jobSlice";
 
 const Job = ({ job }) => {
   const { title, type, salary, deadline, id } = job;
+
+  const dispatch = useDispatch();
+
   const getColor = () => {
     let color = "";
     if (type === "Full Time") color = "#FF8A00";
@@ -46,7 +51,11 @@ const Job = ({ job }) => {
         </span>
 
         <span className="sm:ml-3">
-          <button type="button" className="lws-delete btn btn-danger ">
+          <button
+            onClick={() => dispatch(removeJob(id))}
+            type="button"
+            className="lws-delete btn btn-danger "
+          >
             <i className="fa-solid fa-trash text-gray-300 -ml-1 mr-2"></i>
             Delete
           </button>
