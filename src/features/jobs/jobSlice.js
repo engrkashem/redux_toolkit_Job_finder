@@ -6,6 +6,7 @@ const initialState = {
   isError: false,
   jobs: [],
   error: "",
+  filterByType: "",
 };
 
 // async thunks
@@ -27,18 +28,20 @@ export const updateJob = createAsyncThunk(
   }
 );
 
-export const removeJob = createAsyncThunk(
-  "jobs/removeJob",
-  async (id) => {
-    const job = await deleteJob(id);
-    return job;
-  }
-);
+export const removeJob = createAsyncThunk("jobs/removeJob", async (id) => {
+  const job = await deleteJob(id);
+  return job;
+});
 
 // create slice
 const jobSlice = createSlice({
   name: "jobs",
   initialState,
+  reducers: {
+    filterByType: (state, action) => {
+      state.filterByType = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchJobs.pending, (state) => {
@@ -83,7 +86,7 @@ const jobSlice = createSlice({
         const indexToUpdate = state.jobs.findIndex(
           (job) => job?.id == action.payload.id
         );
-        
+
         state.jobs[indexToUpdate] = action.payload;
       })
       .addCase(updateJob.rejected, (state, action) => {
@@ -99,7 +102,9 @@ const jobSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.error = "";
-        state.jobs=state.jobs.filter(job=>job.id !==Number(action.meta.arg))
+        state.jobs = state.jobs.filter(
+          (job) => job.id !== Number(action.meta.arg)
+        );
       })
       .addCase(removeJob.rejected, (state, action) => {
         state.isLoading = false;
@@ -110,3 +115,4 @@ const jobSlice = createSlice({
 });
 
 export default jobSlice.reducer;
+export const { filterByType } = jobSlice.actions;

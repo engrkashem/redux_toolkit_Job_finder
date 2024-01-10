@@ -5,7 +5,9 @@ import { fetchJobs } from "../../features/jobs/jobSlice";
 
 const JobList = () => {
   const dispatch = useDispatch();
-  const { isLoading, isError, jobs, error } = useSelector((state) => state.job);
+  const { isLoading, isError, jobs, error, filterByType } = useSelector(
+    (state) => state.job
+  );
 
   useEffect(() => {
     dispatch(fetchJobs());
@@ -21,7 +23,13 @@ const JobList = () => {
     content = <p>No job is available</p>;
 
   if (!isLoading && !isError && jobs?.length) {
-    content = jobs?.map((job) => <Job key={job?.id} job={job} />);
+    let jobsToShow = [];
+    if (!filterByType || filterByType === "all") {
+      jobsToShow = jobs;
+    } else {
+      jobsToShow = jobs?.filter((job) => job.type === filterByType);
+    }
+    content = jobsToShow?.map((job) => <Job key={job?.id} job={job} />);
   }
 
   return <div className="jobs-list">{content}</div>;
