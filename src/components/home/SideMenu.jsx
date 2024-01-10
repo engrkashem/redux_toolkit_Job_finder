@@ -10,7 +10,7 @@ const SideMenu = () => {
         <ul className="space-y-4">
           <li>
             <a
-              onClick={() => dispatch("all")}
+              onClick={() => dispatch(filterByType("all"))}
               style={{ cursor: "pointer" }}
               className="main-menu menu-active"
               id="lws-alljobs-menu"

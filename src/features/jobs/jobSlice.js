@@ -7,6 +7,7 @@ const initialState = {
   jobs: [],
   error: "",
   filterByType: "",
+  searchText:"",
 };
 
 // async thunks
@@ -40,6 +41,11 @@ const jobSlice = createSlice({
   reducers: {
     filterByType: (state, action) => {
       state.filterByType = action.payload;
+      state.searchText="";
+    },
+    searchText:(state, action) => {
+      state.searchText = action.payload;
+      state.filterByType = "";
     },
   },
   extraReducers: (builder) => {
@@ -115,4 +121,4 @@ const jobSlice = createSlice({
 });
 
 export default jobSlice.reducer;
-export const { filterByType } = jobSlice.actions;
+export const { filterByType, searchText } = jobSlice.actions;

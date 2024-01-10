@@ -5,9 +5,8 @@ import { fetchJobs } from "../../features/jobs/jobSlice";
 
 const JobList = () => {
   const dispatch = useDispatch();
-  const { isLoading, isError, jobs, error, filterByType } = useSelector(
-    (state) => state.job
-  );
+  const { isLoading, isError, jobs, error, filterByType, searchText } =
+    useSelector((state) => state.job);
 
   useEffect(() => {
     dispatch(fetchJobs());
@@ -24,11 +23,16 @@ const JobList = () => {
 
   if (!isLoading && !isError && jobs?.length) {
     let jobsToShow = [];
-    if (!filterByType || filterByType === "all") {
-      jobsToShow = jobs;
-    } else {
+    if (filterByType && filterByType !== "all") {
       jobsToShow = jobs?.filter((job) => job.type === filterByType);
+    } else if (searchText) {
+      jobsToShow = jobs.filter((job) =>
+        job.title.toLowerCase().includes(searchText.toLowerCase())
+      );
+    } else {
+      jobsToShow = jobs;
     }
+
     content = jobsToShow?.map((job) => <Job key={job?.id} job={job} />);
   }
 
