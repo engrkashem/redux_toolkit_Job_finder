@@ -2,11 +2,19 @@ import { useDispatch, useSelector } from "react-redux";
 import Job from "./Job";
 import { useEffect } from "react";
 import { fetchJobs } from "../../features/jobs/jobSlice";
+import { sortBySalary } from "../../utils/sortBySalary";
 
 const JobList = () => {
   const dispatch = useDispatch();
-  const { isLoading, isError, jobs, error, filterByType, searchText } =
-    useSelector((state) => state.job);
+  const {
+    isLoading,
+    isError,
+    jobs,
+    error,
+    filterByType,
+    searchText,
+    sortOrder,
+  } = useSelector((state) => state.job);
 
   useEffect(() => {
     dispatch(fetchJobs());
@@ -31,6 +39,10 @@ const JobList = () => {
       );
     } else {
       jobsToShow = jobs;
+    }
+
+    if (sortOrder !== "Default") {
+      jobsToShow = sortBySalary(sortOrder, jobsToShow);
     }
 
     content = jobsToShow?.map((job) => <Job key={job?.id} job={job} />);
